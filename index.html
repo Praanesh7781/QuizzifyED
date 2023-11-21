@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QUIZ TESTER</title>
+  <link rel="stylesheet" href="style1.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 20px;
+      background-color: #f4f4f4;
+      background-image: url('background.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
+
+    #question-container {
+      max-width: 800px;
+      margin: auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      display: none; /* Initially hide the quiz container */
+    }
+
+    .question {
+      margin-bottom: 20px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      background-color: #fafafa;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #3498db;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    li {
+      margin: 10px 0;
+    }
+
+    #submit-button-container {
+      margin-top: 20px;
+    }
+
+    #userDataContainer,
+    #question-container,
+    #result-container {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>QUIZ TESTER</h1>
+
+  <div id="createUserForm">
+    <!-- Content from the first HTML file -->
+    <h2>Create User</h2>
+    <form action="#" id="createUserForm">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" required>
+      <br>
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required>
+      <br>
+      <label for="preferences">Preferences:</label>
+      <select name="preferences" id="preferences">
+        <option value="Data Science">Data Science</option>
+        <option value="Autonomous System">Autonomous System</option>
+        <option value="Product Management">Product Management</option>
+        <option value="Business">Business</option>
+        <option value="Programging and Development">Programming and Development</option>
+        <option value="Artificial Intelligence">Artificial Intelligence</option>
+        <option value="Cloud Computing">Cloud Computing</option>
+        <option value="Career development">Career Development</option>
+      </select>
+      <br>
+      <button type="button" onclick="showQuiz()">Next Page</button>
+    </form>
+  </div>
+
+  <div id="userDataContainer">
+    <!-- Content from the second HTML file -->
+    <h2>Manage Users</h2>
+    <ul>
+      <li><a href="#" id="getUserLink">Get User</a></li>
+      <li><a href="#" id="updateUserLink">Update User</a></li>
+      <li><a href="#" id="deleteUserLink">Delete User</a></li>
+    </ul>
+  </div>
+
+  <div id="question-container">
+    <h2>Questions</h2>
+    <div id="questions"></div>
+    <div id="submit-button-container">
+      <button onclick="submitAnswers()">Submit Answers</button>
+    </div>
+  </div>
+
+  <div id="result-container">
+    <h2>Result</h2>
+    <p id="userScore"></p>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    // The questions array...
+    // (same as before)
+
+    // Variables to keep track of the user's answers and score
+    let userAnswers = [];
+    let userScore = 0;
+
+    function showQuiz() {
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+
+      if (name.trim() === '' || email.trim() === '') {
+        alert('Please fill out all fields before proceeding.');
+        return;
+      }
+
+      document.getElementById("createUserForm").style.display = "none";
+      document.getElementById("userDataContainer").style.display = "none";
+      document.getElementById("question-container").style.display = "block";
+
+      generateRandomQuestions();
+    }
+    const questions = [
+      {
+            question: "What does the acronym 'VPN' stand for?",
+            options: ["Virtual Private Network", "Very Personal Network", "Virtual Public Network", "Visible Private Network"],
+            correctAnswer: 0,
+        },
+        {
+            question: "What is the purpose of a firewall in network security?",
+            options: ["To prevent physical damage to computers", "To block unauthorized access", "To enhance internet speed", "To encrypt data transmissions"],
+            correctAnswer: 1,
+        },
+        
+        {
+            question: "What is the difference between a virus and a worm in the context of cybersecurity?",
+            options: [
+                "A virus spreads through email, while a worm spreads through physical media.",
+                "A virus requires user interaction to spread, while a worm can spread independently.",
+                "A virus is always malicious, while a worm can be benign.",
+                "A virus encrypts files, while a worm deletes files."
+            ],
+            correctAnswer: 1,
+        },
+        {
+            question: "What is the purpose of a Virtual Machine (VM) in cybersecurity?",
+            options: ["To enhance internet speed", "To simulate a separate computer environment", "To block unauthorized access", "To encrypt network traffic"],
+            correctAnswer: 1,
+        },
+        {
+            question: "What is a 'penetration test' in cybersecurity?",
+            options: ["A test to measure internet speed", "A simulated cyber attack to identify and fix vulnerabilities", "A test to detect phishing emails", "A test to assess user awareness"],
+            correctAnswer: 1,
+        },
+        {
+            question: "What is the role of a SIEM?",
+            options: ["To secure email communication", "To manage network infrastructure", "To collect and analyze security-related data from various sources", "To encrypt files"],
+            correctAnswer: 2,
+        },
+        {
+            question: "What is a 'firewall' in the context of network security?",
+            options: ["A physical barrier to protect servers", "A software or hardware system that controls incoming and outgoing network traffic", "A tool for encrypting files", "A system for secure email communication"],
+            correctAnswer: 1,
+        },
+        {
+            question: "Which of the following is an example of a strong password?",
+            options: ["password123",   "iloveyou" , "SecureP@ssw0rd"   , "abc123"],
+            correctAnswer: 2,
+        },
+        {
+            question: "What is the first line of defense against malware?",
+            options: [" Antivirus software "," User awareness and education", "   Firewalls " , "Intrusion Detection Systems"],
+            correctAnswer: 1,
+        },
+        {
+            question: "What is the purpose of a Network Intrusion Detection System ?",
+            options: ["  To prevent unauthorized access  ","To detect and respond to suspicious activities on the network","   To encrypt network traffic "," To manage IP addresses"],
+            correctAnswer: 1,
+        },
+        {
+            question: "What does the term phishing refer to in the context of cybersecurity? ",
+            options: ["   Fishing for personal information  ","  Sending unsolicited emails "," Tricking individuals into revealing sensitive information","   Hacking wireless networks"],
+            correctAnswer: 3,
+        },
+        {
+            question: "Which protocol is commonly used to secure email communication? ",
+            options: [" HTTP ","   SMTP",   " TLS ","UDP"],
+            correctAnswer: 3,
+        },
+        {
+            question: "What is a Man-in-the-Middle (MitM) attack?",
+            options: ["    An attack on physical infrastructure","    Intercepting and altering communication between two parties ","Malicious software that encrypts files "," Unauthorized access to a network"],
+            correctAnswer: 1,
+        },
+        {
+            question: "What does the term zero-day vulnerability mean?",
+            options: ["A vulnerability that is never addressed"," A vulnerability that has existed for zero days "," A newly discovered and unpatched software vulnerability ", "   A vulnerability with zero impact on security"],
+            correctAnswer: 3,
+        },
+        {
+            question: "What is the purpose of encryption in cybersecurity? ",
+            options: ["  To slow down network traffic ","   To protect data by converting it into a secure format","   To detect and respond to security incidents ","To compress large files"],
+            correctAnswer: 1,
+        },
+        {
+            question: "Which cryptographic algorithm is commonly used for secure communication over the internet? ",
+            options: ["   DES"," RSA"," AES",  "   SHA-1"],
+            correctAnswer: 2,
+        },
+        {
+            question: "What is the role of a digital signature in cybersecurity?",
+            options: ["Encrypting data ","Authenticating the sender and ensuring data integrity ","  Blocking malicious websites"," Scanning for malware"],
+            correctAnswer: 1,
+        },
+        {
+            question: "What does SSL/TLS stand for in the context of secure communication?",
+            options: ["Secure Sockets Layer/Transport Layer Security "," Secure Sockets Layer/Transport Layer Security","   Simple Secure Link/Transmission Layer System   "," Strong Security Layer/Total Link Security   Secure Socket Link/Technical Layer System"],
+            correctAnswer: 0,
+        },
+        {
+            question: "What is a hash function used for in cryptography? ",
+            options: ["  Encrypting files  ","  Creating a fixed-size representation of data ","   Securing network connections ","   Authenticating users"],
+            correctAnswer: 1,
+        },
+        {
+            question: "What is a DoS attack?",
+            options: ["Denial of Service ","  Detection of Security", "  Data Overload System ","   Distributed Online Scam"],
+            correctAnswer: 0,
+        },
+        {
+            question: "What is ransomware? ",
+            options: ["  Malicious software that steals passwords  ","  Software that spreads through email attachments "," Malware that encrypts files and demands payment for their release ","   A type of phishing attack"],
+            correctAnswer: 3,
+        },
+        {
+            question: "How can you protect against social engineering attacks?",
+            options: ["  Use complex passwords ","  Be cautious about sharing personal information online ","  Install antivirus software "," Encrypt all communication"],
+            correctAnswer: 1,
+        },
+        {
+            question: "What is the purpose of a honeypot in cybersecurity?",
+            options: ["To attract and detect attackers" ," To store sensitive information","  To enhance network performance "," To secure wireless networks"],
+            correctAnswer: 0,
+        },
+        {
+            question: " What does IoT stand for?",
+            options: [" Internet of Technology","Internet of Things","Internet of Thinking","Internet of Transmission"],
+            correctAnswer: 1,
+        },
+        {
+            question: " Which of the following is a key component of IoT devices?",
+            options: ["TMicroprocessor and Sensors ","Keyboard and Mouse"," Printer and Scanner","Monitor and CPU"],
+            correctAnswer: 0,
+        },
+        {
+            question: "What is the primary purpose of IoT?",
+            options: ["Enhancing virtual reality","Connecting physical devices and enabling data exchange","Creating artificial intelligence","Designing computer networks"],
+            correctAnswer: 1,
+        },
+        {
+            question: "Which communication protocol is commonly used in IoT devices for low-power, short-range communication?",
+            options: ["Bluetooth ","Wi-Fi","Ethernet", "NFC"],
+            correctAnswer: 0,
+        },
+        {
+            question: "What is the significance of MQTT in IoT?",
+            options: ["My Quick Transmission Tool","Message Queuing Telemetry Transport","Multi-Question Tracking Tool","Managed Query Transaction Toolkit"],
+            correctAnswer: 1,
+        },
+        {
+            question: "Which IoT application involves the interconnection of everyday devices in a home?",
+            options: ["Industrial IoT","Healthcare IoT","Smart Home","Agricultural IoT"],
+            correctAnswer: 2,
+        },
+        {
+            question: "What is a sensor node in an IoT network?",
+            options: ["Central processing unit","Device that gathers data from the environment","Communication protocol","Power source for IoT devices"],
+            correctAnswer: 1,
+        },
+        {
+            question: "Which technology is often used for location tracking in IoT devices?",
+            options: ["GPS (Global Positioning System)","RFID (Radio-Frequency Identification)","NFC (Near Field Communication)","Wi-Fi"],
+            correctAnswer: 0,
+        },
+        {
+            question: "What is the primary challenge in IoT device security?",
+            options: ["Lack of available devices","Limited data storage capacity","Security and privacy concerns","High energy consumption"],
+            correctAnswer: 3,
+        },
+        {
+            question: "In IoT terminology, what does Edge Computing refer to?",
+            options: ["Cloud computing at a high altitude","Processing data closer to the source","Device charging capability","Communication between IoT devices"],
+            correctAnswer: 1,
+        },
+        {
+            question: "What does HTML stand for?",
+            options: [" Hyper Text Markup Language","Hyperlink and Text Markup Language","High-Level Text Markup Language","Hyper Transfer Markup Language"],
+            correctAnswer: 0,
+        },
+        {
+            question: "Which programming language is commonly used for client-side web development?",
+            options: ["Java","Python","JavaScript","C++"],
+            correctAnswer: 3,
+        },
+        {
+            question: "What is the purpose of CSS in web development?",
+            options: ["Server-side scripting","Styling and formatting web pages","Database management","Web server configuration"],
+            correctAnswer: 1,
+        },
+        {
+            question: "Which of the following is used for server-side scripting?",
+            options: ["JavaScript","HTML","CSS","PHP"],
+            correctAnswer: 4,
+        },
+        {
+            question: "Which tag is used to create a hyperlink in HTML?",
+            options: ["link","a","hlink","url"],
+            correctAnswer: 2,
+        },
+        {
+            question: "What does the acronym URL stand for?",
+            options: ["Uniform Resource Locator","Universal Resource Language","Unified Resource Locator","Unique Resource Link"],
+            correctAnswer: 0,
+        },
+        {
+            question: "Which file type is commonly associated with cascading style sheets?",
+            options: [" .js"," .html","css",".jpg"],
+            correctAnswer: 2,
+        },
+        {
+            question: "What is the purpose of the <head> tag in an HTML document?",
+            options: [" Displaying content","Defining the page structure","Storing metadata and resources","Creating links"],
+            correctAnswer: 3,
+        },
+        {
+            question: "What is the purpose of the <canvas> element in HTML5?",
+            options: ["Video playback","Drawing graphics and animations","Audio streaming","Document styling"],
+            correctAnswer: 3,
+        },
+        {
+            question: "What is the role of the <script> tag in HTML?",
+            options: ["Styling","Including external scripts","Creating forms","Defining page structure"],
+            correctAnswer: 1,
+        },
+        {
+            question: "What is the role of the <script> tag in HTML?",
+            options: ["Styling","Including external scripts","Creating forms","Defining page structure"],
+            correctAnswer: 1,
+        },
+        {
+            question: "What is the primary goal of exploratory data analysis (EDA) in data science?",
+            options: ["To build predictive models","To summarize and visualize data","To deploy machine learning algorithms","To clean and preprocess data"],
+            correctAnswer: 1,
+        },
+        {
+            question: "Which programming language is widely used for data analysis and manipulation in data science?",
+            options: ["Java","Python","C++","R"],
+            correctAnswer: 1,
+        },
+        {
+            question: "In machine learning, what is the purpose of the training dataset?",
+            options: ["To evaluate model performance","To make predictions on new data","To train the model parameters","To validate model accuracy"],
+            correctAnswer: 2,
+        },
+        {
+            question: "Which type of machine learning algorithm is used for classification tasks?",
+            options: ["Regression","Clustering","Decision Trees","Principal Component Analysis (PCA)"],
+            correctAnswer: 2,
+        },
+        {
+            question: "What is the term for the phenomenon where a model performs well on the training data but poorly on new, unseen data?",
+            options: [" Overfitting","Underfitting","Bias","Variance"],
+            correctAnswer: 0,
+        },
+        {
+            question: "In data science, what is the purpose of feature scaling?",
+            options: ["To create new features","To remove irrelevant features","To standardize the range of features","To visualize data distributions"],
+            correctAnswer: 2,
+          },
+    ];                
+
+    function generateRandomQuestions() {
+      const totalQuestions = 50;
+      const questionsToDisplay = 20;
+
+      // Shuffle questions array
+      const shuffledQuestions = questions.sort(() => Math.random() - 0.5);
+
+      // Take the first 20 questions
+      const selectedQuestions = shuffledQuestions.slice(0, questionsToDisplay);
+      // Same as before...
+
+      // Display questions
+      displayQuestions(selectedQuestions);
+    }
+
+    function displayQuestions(questions) {
+      const questionsContainer = document.getElementById("questions");
+      questionsContainer.innerHTML = ""; // Clear previous questions
+
+      questions.forEach((q, index) => {
+        const questionDiv = document.createElement("div");
+        questionDiv.classList.add("question");
+
+        const questionText = document.createElement("p");
+        questionText.innerHTML = `<strong>Question ${index + 1}:</strong> ${q.question}`;
+        questionDiv.appendChild(questionText);
+
+        const optionsList = document.createElement("ul");
+        q.options.forEach((option, i) => {
+          const optionItem = document.createElement("li");
+          optionItem.innerHTML = `<label><input type="radio" name="q${index}" value="${i}"> ${option}</label>`;
+          optionsList.appendChild(optionItem);
+        });
+
+        questionDiv.appendChild(optionsList);
+        questionsContainer.appendChild(questionDiv);
+      });
+
+      // Display submit button
+      const submitButtonContainer = document.getElementById("submit-button-container");
+      submitButtonContainer.style.display = "block";
+    }
+
+    function submitAnswers() {
+      // Collect user answers
+      const questions = document.getElementById("questions").querySelectorAll(".question");
+      userAnswers = Array.from(questions).map((question, index) => {
+        const selectedOption = question.querySelector(`input[name="q${index}"]:checked`);
+        return selectedOption ? parseInt(selectedOption.value) : -1;
+      });
+
+      // Evaluate user's answers
+      userScore = evaluateAnswers(userAnswers);
+
+      // Display result
+      displayResult(userScore);
+    }
+
+    function evaluateAnswers(answers) {
+      // You can implement your logic to evaluate the answers.
+      // For now, let's just count the correct answers.
+      return answers.reduce((score, answer, index) => {
+        const correctAnswer = questions[index].correctAnswer;
+        return answer === correctAnswer ? score + 1 : score;
+      }, 0);
+    }
+
+    function displayResult(score) {
+      // Display the result
+      document.getElementById("question-container").style.display = "none";
+      document.getElementById("result-container").style.display = "block";
+      document.getElementById("userScore").innerText = `Your score: ${score}/${userAnswers.length}`;
+    }
+  function displayResult(score) {
+    // Redirect the user to a new page for recommendations
+    window.location.href = '/recommendations.html';
+  }
+
+  function showRecommendations() {
+    // Make an API call to Flask app to get recommendations
+    fetch('/get_recommendations')  // assuming this is the endpoint you've set up in your Flask app
+      .then(response => response.json())
+      .then(data => {
+        // Display the recommendations on the new HTML page
+        const recommendationsContainer = document.getElementById("recommendations-container");
+        recommendationsContainer.innerHTML = "<h2>Recommended Courses:</h2>";
+        data.forEach(course => {
+          const courseLink = document.createElement("a");
+          courseLink.href = course.Link;
+          courseLink.target = "_blank";
+          courseLink.innerText = course.Name;
+          recommendationsContainer.appendChild(courseLink);
+          recommendationsContainer.appendChild(document.createElement("br"));
+        });
+      })
+      .catch(error => console.error('Error:', error));
+  }
+  </script>
+
+</body>
+</html>

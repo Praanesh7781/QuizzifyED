@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Course Recommendations</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <h1>Course Recommendations</h1>
+
+  <div id="recommendation-container">
+    <!-- Recommendation content will be dynamically inserted here -->
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    // Add JavaScript logic to fetch and display course recommendations
+    document.addEventListener("DOMContentLoaded", function () {
+      // Fetch course recommendations from the server
+      fetch('/get_recommendations')
+        .then(response => response.json())
+        .then(recommendations => {
+          // Display recommendations
+          displayRecommendations(recommendations);
+        })
+        .catch(error => console.error('Error fetching recommendations:', error));
+    });
+
+    // Function to display recommendations on the webpage
+    function displayRecommendations(recommendations) {
+      const recommendationContainer = document.getElementById("recommendation-container");
+      recommendationContainer.innerHTML = ""; // Clear previous recommendations
+
+      const recommendationList = document.createElement("ul");
+
+      recommendations.forEach((recommendation) => {
+        const recommendationItem = document.createElement("li");
+        const recommendationLink = document.createElement("a");
+        recommendationLink.textContent = `${recommendation.name} - ${recommendation.link}`;
+        recommendationLink.href = recommendation.link;
+        recommendationItem.appendChild(recommendationLink);
+        recommendationList.appendChild(recommendationItem);
+      });
+
+      recommendationContainer.appendChild(recommendationList);
+    }
+  </script>
+
+</body>
+</html>
+
